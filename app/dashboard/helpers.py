@@ -512,6 +512,11 @@ def create_new_bounty(old_bounties, bounty_payload, bounty_details, bounty_id):
                     'admin_override_org_name', 'admin_override_org_logo', 'bounty_state'
                 ],
             )
+            if latest_old_bounty_dict['fulfillments']:
+                old_fulfillments = BountyFulfillment.objects.filter(id__in=latest_old_bounty_dict['fulfillments'])
+                for f in old_fulfillments:
+                    f.bounty = new_bounty.id
+                    f.save()
             if latest_old_bounty_dict['bounty_reserved_for_user']:
                 latest_old_bounty_dict['bounty_reserved_for_user'] = Profile.objects.get(pk=latest_old_bounty_dict['bounty_reserved_for_user'])
             if latest_old_bounty_dict.get('bounty_owner_profile'):
