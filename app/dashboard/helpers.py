@@ -25,7 +25,7 @@ from enum import Enum
 
 from django.conf import settings
 from django.conf.urls.static import static
-from django.core.exceptions import ValidationError
+from django.core.exceptions import MultipleObjectsReturned, ValidationError
 from django.core.validators import URLValidator
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
@@ -306,9 +306,20 @@ def handle_bounty_fulfillments(fulfillments, new_bounty, old_bounty):
 
     for fulfillment in fulfillments:
         fulfillment_id = fulfillment.get('id')
-        old_bounty_fulfillments = BountyFulfillment.objects.filter(fulfillment_id=fulfillment_id, bounty=old_bounty).nocache()
-        if old_bounty_fulfillments.exists():
-            old_fulfillment = old_bounty_fulfillments.first()
+        old_fulfillment = None
+        try:
+            old_fulfillment = BountyFulfillment.objects.get(bounty=old_bounty, fulfillment_id=fulfillment_id)
+
+        except MultipleObjectsReturned as error:
+            logger.warning(f'error: found duplicate fulfillments for bounty {old_bounty} {error}')
+            old_bounty_fulfillments = BountyFulfillment.objects.filter(fulfillment_id=fulfillment_id, bounty=old_bounty).nocache()
+            if old_bounty_fulfillments.exists():
+                old_fulfillment = old_bounty_fulfillments.first()
+
+        except BountyFulfillment.DoesNotExist as error:
+            logger.warning(f'info: bounty {old_bounty} has no fulfillments in db {error}')
+
+        if old_fulfillment:
             if not old_fulfillment.accepted and fulfillment.get('accepted'):
                 # update fulfillment to accepted + reference to new bounty
                 now = timezone.now()
