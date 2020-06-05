@@ -2596,6 +2596,16 @@ def post_add_HackathonRegistration(sender, instance, created, **kwargs):
             )
 
 
+class PersonalToken(SuperModel):
+    """ERC-20 personal token"""
+    profile = models.OneToOneField('Profile', on_delete=models.CASCADE, related_name='personal_token',
+                                   help_text='User profile for this personal token')
+
+    address = models.CharField(max_length=50)
+    symbol = models.CharField(max_length=10)
+    name = models.CharField(max_length=30)
+
+
 class Profile(SuperModel):
     """Define the structure of the user profile.
 
