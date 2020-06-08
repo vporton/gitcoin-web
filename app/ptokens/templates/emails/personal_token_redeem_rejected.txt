@@ -1,5 +1,4 @@
 {% load i18n %}
-
 Reedem of personal token to you rejected
 
 * {% trans "Token network:" %} {{ ptoken.network }}

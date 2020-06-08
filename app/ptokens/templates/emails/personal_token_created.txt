@@ -1,3 +1,4 @@
+{% load i18n %}
 Your personal token created
 
 * {% trans "Token network:" %} {{ ptoken.network }}

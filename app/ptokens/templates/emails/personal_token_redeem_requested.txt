@@ -1,5 +1,4 @@
 {% load i18n %}
-
 Your personal token reedem requested
 
 * {% trans "Token network:" %} {{ ptoken.network }}
