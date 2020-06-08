@@ -74,9 +74,9 @@ def render_personal_token_redeem_complete_receiver(from_profile, ptoken, redeem)
 
 
 @staff_member_required
-def personal_token_created():
+def personal_token_created(request):
     address = '0x2460e7Da41D5c5B1e41D645E3bF63fC6f9E7A323'  # completely random
-    response_html, _, _ = render_personal_token_created(PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_adddress=address))
+    response_html, _, _ = render_personal_token_created(PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_address=address))
     return HttpResponse(response_html)
 
 
@@ -84,7 +84,7 @@ def personal_token_created():
 def personal_token_redeem_requested(request, profile_id):
     address = '0x2460e7Da41D5c5B1e41D645E3bF63fC6f9E7A323'  # completely random
     profile = Profile.objects.get(pk=profile_id)
-    response_html, _, _ = render_personal_token_redeem_requested(profile, PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_adddress=address))
+    response_html, _, _ = render_personal_token_redeem_requested(profile, PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_address=address))
     return HttpResponse(response_html)
 
 
@@ -92,7 +92,7 @@ def personal_token_redeem_requested(request, profile_id):
 def personal_token_redeem_accepted(request, profile_id):
     address = '0x2460e7Da41D5c5B1e41D645E3bF63fC6f9E7A323'  # completely random
     profile = Profile.objects.get(pk=profile_id)
-    response_html, _, _ = render_personal_token_redeem_accepted(profile, PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_adddress=address))
+    response_html, _, _ = render_personal_token_redeem_accepted(profile, PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_address=address))
     return HttpResponse(response_html)
 
 
@@ -100,7 +100,7 @@ def personal_token_redeem_accepted(request, profile_id):
 def personal_token_redeem_rejected(request, profile_id):
     address = '0x2460e7Da41D5c5B1e41D645E3bF63fC6f9E7A323'  # completely random
     profile = Profile.objects.get(pk=profile_id)
-    response_html, _, _ = render_personal_token_redeem_rejected(profile, PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_adddress=address))
+    response_html, _, _ = render_personal_token_redeem_rejected(profile, PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_address=address))
     return HttpResponse(response_html)
 
 
@@ -108,7 +108,7 @@ def personal_token_redeem_rejected(request, profile_id):
 def personal_token_redeem_complete_sender(request, profile_id):
     address = '0x2460e7Da41D5c5B1e41D645E3bF63fC6f9E7A323'  # completely random
     profile = Profile.objects.get(pk=profile_id)
-    response_html, _, _ = render_personal_token_redeem_complete_sender(profile, PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_adddress=address))
+    response_html, _, _ = render_personal_token_redeem_complete_sender(profile, PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_address=address))
     return HttpResponse(response_html)
 
 
@@ -116,5 +116,5 @@ def personal_token_redeem_complete_sender(request, profile_id):
 def personal_token_redeem_complete_receiver(request, profile_id):
     address = '0x2460e7Da41D5c5B1e41D645E3bF63fC6f9E7A323'  # completely random
     profile = Profile.objects.get(pk=profile_id)
-    response_html, _, _ = render_personal_token_redeem_complete_sender(profile, PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_adddress=address))
+    response_html, _, _ = render_personal_token_redeem_complete_sender(profile, PersonalToken(network='mainnet', token_symbol='TST', token_name='Test Token', token_address=address))
     return HttpResponse(response_html)
