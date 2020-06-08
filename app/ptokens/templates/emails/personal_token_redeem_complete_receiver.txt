@@ -1,0 +1,10 @@
+{% load i18n %}
+
+Reedem of personal token to you complete
+
+* {% trans "Token network:" %} {{ ptoken.network }}
+* {% trans "Token by:" %} {{ from_profile }}
+* {% trans "Token name:" %} {{ ptoken.token_name }}
+* {% trans "Token symbol:" %} {{ ptoken.token_symbol }}
+* {% trans "Amount:" %} {{ redeem.total }}
+* {% trans "Reason:" %} {{ redeem.reason }}

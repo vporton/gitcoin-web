@@ -1,0 +1,6 @@
+Your personal token created
+
+* {% trans "Token network:" %} {{ ptoken.network }}
+* {% trans "Token name:" %} {{ ptoken.token_name }}
+* {% trans "Token symbol:" %} {{ ptoken.token_symbol }}
+* {% trans "Token address:" %} {{ ptoken.token_address }}
