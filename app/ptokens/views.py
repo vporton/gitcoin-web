@@ -42,7 +42,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from dashboard.models import Profile
 from ptokens.helpers import record_ptoken_activity
-from ptokens.mails import personal_token_created, personal_token_redeem_accepted, personal_token_redeem_denied, \
+from ptokens.mails import personal_token_created, personal_token_redeem_accepted, \
     personal_token_redeem_complete_sender, personal_token_redeem_complete_receiver, personal_token_redeem_requested
 from ptokens.models import PersonalToken, RedemptionToken, PurchasePToken
 
