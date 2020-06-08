@@ -21,7 +21,8 @@ from django.utils import translation
 from marketing.mails import setup_lang, send_mail
 from marketing.utils import should_suppress_notification_email, func_name
 from ptokens.emails import render_personal_token_created, render_personal_token_redeem_accepted, \
-    render_personal_token_redeem_rejected, render_personal_token_redeem_canceled, render_personal_token_redeem_denied
+    render_personal_token_redeem_rejected, render_personal_token_redeem_requested, \
+    render_personal_token_redeem_complete_sender, render_personal_token_redeem_complete_receiver
 
 
 def personal_token_created(profile, network, symbol, name, address):
@@ -38,6 +39,27 @@ def personal_token_created(profile, network, symbol, name, address):
     try:
         setup_lang(to_email)
         html, text, subject = render_personal_token_created(network, symbol, name, address)
+
+        if not should_suppress_notification_email(to_email, 'personal_token_created'):
+            send_mail(from_email, to_email, subject, text, html, categories=['transactional', func_name()])
+    finally:
+        translation.activate(cur_language)
+
+
+def personal_token_redeem_requested(profile, to_profile, network, symbol, name, address):
+    from_email = settings.CONTACT_EMAIL
+    to_email = profile.email
+    if not to_email:
+        if profile and profile.user:
+            to_email = profile.user.email
+    if not to_email:
+        return
+
+    cur_language = translation.get_language()
+
+    try:
+        setup_lang(to_email)
+        html, text, subject = render_personal_token_redeem_requested(to_profile, network, symbol, name, address)
 
         if not should_suppress_notification_email(to_email, 'personal_token_created'):
             send_mail(from_email, to_email, subject, text, html, categories=['transactional', func_name()])
@@ -66,7 +88,7 @@ def personal_token_redeem_accepted(profile, from_profile, network, symbol, name,
         translation.activate(cur_language)
 
 
-def personal_token_redeem_rejected(profile, from_profile, network, symbol, name, address):
+def personal_token_redeem_rejected(profile, to_profile, network, symbol, name, address):
     from_email = settings.CONTACT_EMAIL
     to_email = profile.email
     if not to_email:
@@ -79,7 +101,7 @@ def personal_token_redeem_rejected(profile, from_profile, network, symbol, name,
 
     try:
         setup_lang(to_email)
-        html, text, subject = render_personal_token_redeem_rejected(from_profile, network, symbol, name, address)
+        html, text, subject = render_personal_token_redeem_rejected(to_profile, network, symbol, name, address)
 
         if not should_suppress_notification_email(to_email, 'personal_token_created'):
             send_mail(from_email, to_email, subject, text, html, categories=['transactional', func_name()])
@@ -87,7 +109,7 @@ def personal_token_redeem_rejected(profile, from_profile, network, symbol, name,
         translation.activate(cur_language)
 
 
-def personal_token_redeem_canceled(profile, from_profile, network, symbol, name, address):
+def personal_token_redeem_complete_sender(profile, to_profile, network, symbol, name, address):
     from_email = settings.CONTACT_EMAIL
     to_email = profile.email
     if not to_email:
@@ -100,7 +122,7 @@ def personal_token_redeem_canceled(profile, from_profile, network, symbol, name,
 
     try:
         setup_lang(to_email)
-        html, text, subject = render_personal_token_redeem_canceled(from_profile, network, symbol, name, address)
+        html, text, subject = render_personal_token_redeem_complete_sender(to_profile, network, symbol, name, address)
 
         if not should_suppress_notification_email(to_email, 'personal_token_created'):
             send_mail(from_email, to_email, subject, text, html, categories=['transactional', func_name()])
@@ -108,7 +130,7 @@ def personal_token_redeem_canceled(profile, from_profile, network, symbol, name,
         translation.activate(cur_language)
 
 
-def personal_token_redeem_denied(profile, from_profile, network, symbol, name, address):
+def personal_token_redeem_complete_receiver(profile, from_profile, network, symbol, name, address):
     from_email = settings.CONTACT_EMAIL
     to_email = profile.email
     if not to_email:
@@ -121,7 +143,7 @@ def personal_token_redeem_denied(profile, from_profile, network, symbol, name, a
 
     try:
         setup_lang(to_email)
-        html, text, subject = render_personal_token_redeem_denied(from_profile, network, symbol, name, address)
+        html, text, subject = render_personal_token_redeem_complete_receiver(from_profile, network, symbol, name, address)
 
         if not should_suppress_notification_email(to_email, 'personal_token_created'):
             send_mail(from_email, to_email, subject, text, html, categories=['transactional', func_name()])

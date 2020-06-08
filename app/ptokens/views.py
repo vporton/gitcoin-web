@@ -42,6 +42,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from dashboard.models import Profile
 from ptokens.helpers import record_ptoken_activity
+from ptokens.mails import personal_token_created, personal_token_redeem_accepted, personal_token_redeem_denied, \
+    personal_token_redeem_complete_sender, personal_token_redeem_complete_receiver, personal_token_redeem_requested
 from ptokens.models import PersonalToken, RedemptionToken, PurchasePToken
 
 
@@ -128,6 +130,7 @@ def tokens(request):
 
         token = PersonalToken.objects.create(**kwargs)
         record_ptoken_activity('create_ptoken', token, request.user.profile)
+        personal_token_created(request.user.profile, token.network, token.token_symbol, token.token_name, token.token_address)
 
         return JsonResponse({
             'error': False,
@@ -208,6 +211,12 @@ def ptoken_redemptions(request, tokenId):
                 {'error': _('You must be authenticated via github to use this feature!')},
                 status=401)
         RedemptionToken.objects.create(ptoken=ptoken, network=network, total=total, redemption_requester=request.user.profile)
+        personal_token_redeem_requested(request.user.profile,
+                                        ptoken.token_owner_profile,
+                                        ptoken.network,
+                                        ptoken.token_symbol,
+                                        ptoken.token_name,
+                                        ptoken.token_address)
 
     redemptions = RedemptionToken.objects.filter(redemption_requester=request.user.profile)
 
@@ -282,6 +291,33 @@ def ptoken_redemption(request, redemptionId):
 
             if metadata:
                 record_ptoken_activity(event_name, redemption.ptoken, user.profile, metadata)
+                if event_name == 'accept_redemption_ptoken':
+                    personal_token_redeem_accepted(redemption.redemption_requester,
+                                                   redemption.ptoken.token_owner_profile,
+                                                   redemption.ptoken.network,
+                                                   redemption.ptoken.token_symbol,
+                                                   redemption.ptoken.token_name,
+                                                   redemption.ptoken.token_address)
+                if event_name == 'denies_redemption_ptoken':
+                    personal_token_redeem_denied(redemption.redemption_requester,
+                                                 redemption.ptoken.token_owner_profile,
+                                                 redemption.ptoken.network,
+                                                 redemption.ptoken.token_symbol,
+                                                 redemption.ptoken.token_name,
+                                                 redemption.ptoken.token_address)
+                if event_name == 'complete_redemption_ptoken':
+                    personal_token_redeem_complete_sender(redemption.ptoken.token_owner_profile,
+                                                          redemption.redemption_requester,
+                                                          redemption.ptoken.network,
+                                                          redemption.ptoken.token_symbol,
+                                                          redemption.ptoken.token_name,
+                                                          redemption.ptoken.token_address)
+                    personal_token_redeem_complete_receiver(redemption.redemption_requester,
+                                                            redemption.ptoken.token_owner_profile,
+                                                            redemption.ptoken.network,
+                                                            redemption.ptoken.token_symbol,
+                                                            redemption.ptoken.token_name,
+                                                            redemption.ptoken.token_address)
 
     return JsonResponse({
         'error': False,
