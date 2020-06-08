@@ -211,12 +211,7 @@ def ptoken_redemptions(request, tokenId):
                 {'error': _('You must be authenticated via github to use this feature!')},
                 status=401)
         RedemptionToken.objects.create(ptoken=ptoken, network=network, total=total, redemption_requester=request.user.profile)
-        personal_token_redeem_requested(request.user.profile,
-                                        ptoken.token_owner_profile,
-                                        ptoken.network,
-                                        ptoken.token_symbol,
-                                        ptoken.token_name,
-                                        ptoken.token_address)
+        personal_token_redeem_requested(request.user.profile, ptoken.token_owner_profile, ptoken)
 
     redemptions = RedemptionToken.objects.filter(redemption_requester=request.user.profile)
 
@@ -294,30 +289,18 @@ def ptoken_redemption(request, redemptionId):
                 if event_name == 'accept_redemption_ptoken':
                     personal_token_redeem_accepted(redemption.redemption_requester,
                                                    redemption.ptoken.token_owner_profile,
-                                                   redemption.ptoken.network,
-                                                   redemption.ptoken.token_symbol,
-                                                   redemption.ptoken.token_name,
-                                                   redemption.ptoken.token_address)
+                                                   redemption.ptoken)
                 if event_name == 'denies_redemption_ptoken':
                     personal_token_redeem_denied(redemption.redemption_requester,
                                                  redemption.ptoken.token_owner_profile,
-                                                 redemption.ptoken.network,
-                                                 redemption.ptoken.token_symbol,
-                                                 redemption.ptoken.token_name,
-                                                 redemption.ptoken.token_address)
+                                                 redemption.ptoken)
                 if event_name == 'complete_redemption_ptoken':
                     personal_token_redeem_complete_sender(redemption.ptoken.token_owner_profile,
                                                           redemption.redemption_requester,
-                                                          redemption.ptoken.network,
-                                                          redemption.ptoken.token_symbol,
-                                                          redemption.ptoken.token_name,
-                                                          redemption.ptoken.token_address)
+                                                          redemption.ptoken)
                     personal_token_redeem_complete_receiver(redemption.redemption_requester,
                                                             redemption.ptoken.token_owner_profile,
-                                                            redemption.ptoken.network,
-                                                            redemption.ptoken.token_symbol,
-                                                            redemption.ptoken.token_name,
-                                                            redemption.ptoken.token_address)
+                                                            redemption.ptoken)
 
     return JsonResponse({
         'error': False,
