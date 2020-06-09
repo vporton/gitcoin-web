@@ -22,7 +22,7 @@
 
 <ul>
   <li>{% trans "Token network:" %} {{ ptoken.network }}</li>
-  <li>{% trans "Accepted by:" %} {{ from_profile }}</li>
+  <li>{% trans "Rejected by:" %} {{ ptoken.token_owner_profile }}</li>
   <li>{% trans "Token name:" %} {{ ptoken.token_name }}</li>
   <li>{% trans "Token symbol:" %} {{ ptoken.token_symbol }}</li>
   <li>{% trans "Amount:" %} {{ redeem.total }}</li>

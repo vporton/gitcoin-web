@@ -2,7 +2,7 @@
 Reedem of your personal token complete
 
 * {% trans "Token network:" %} {{ ptoken.network }}
-* {% trans "Reedemed by:" %} {{ to_profile }}
+* {% trans "Reedemed by:" %} {{ redeem.redemption_requester }}
 * {% trans "Token name:" %} {{ ptoken.token_name }}
 * {% trans "Token symbol:" %} {{ ptoken.token_symbol }}
 * {% trans "Amount:" %} {{ redeem.total }}

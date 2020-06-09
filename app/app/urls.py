@@ -574,11 +574,11 @@ urlpatterns = [
         name='day_email_campaign'
     ),
     path('_administration/email/ptoken/created', ptokens.emails.personal_token_created, name='test_personal_token_created'),
-    path('_administration/email/ptoken/redeem_requested/<int:profile_id>', ptokens.emails.personal_token_redeem_requested, name='test_personal_token_redeem_reqeested'),
-    path('_administration/email/ptoken/redeem_accepted/<int:profile_id>', ptokens.emails.personal_token_redeem_accepted, name='test_personal_token_redeem_accepted'),
-    path('_administration/email/ptoken/redeem_rejected/<int:profile_id>', ptokens.emails.personal_token_redeem_rejected, name='test_personal_token_redeem_rejected'),
-    path('_administration/email/ptoken/redeem_complete_sender/<int:profile_id>', ptokens.emails.personal_token_redeem_complete_sender, name='test_personal_token_redeem_complete_sender'),
-    path('_administration/email/ptoken/redeem_complete_receiver/<int:profile_id>', ptokens.emails.personal_token_redeem_complete_sender, name='test_personal_token_redeem_complete_receiver'),
+    path('_administration/email/ptoken/redeem_requested/<int:redeem_id>', ptokens.emails.personal_token_redeem_requested, name='test_personal_token_redeem_reqeested'),
+    path('_administration/email/ptoken/redeem_accepted/<int:redeem_id>', ptokens.emails.personal_token_redeem_accepted, name='test_personal_token_redeem_accepted'),
+    path('_administration/email/ptoken/redeem_rejected/<int:redeem_id>', ptokens.emails.personal_token_redeem_rejected, name='test_personal_token_redeem_rejected'),
+    path('_administration/email/ptoken/redeem_complete_sender/<int:redeem_id>', ptokens.emails.personal_token_redeem_complete_sender, name='test_personal_token_redeem_complete_sender'),
+    path('_administration/email/ptoken/redeem_complete_receiver/<int:redeem_id>', ptokens.emails.personal_token_redeem_complete_sender, name='test_personal_token_redeem_complete_receiver'),
     re_path(
         r'^_administration/process_accesscode_request/(.*)$',
         tdi.views.process_accesscode_request,
