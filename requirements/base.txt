@@ -102,3 +102,5 @@ ed25519
 tweepy
 oogway==0.7.0
 icalendar==4.0.7
+aiohttp>=3.12.14 # not directly required, pinned by Snyk to avoid a vulnerability
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
